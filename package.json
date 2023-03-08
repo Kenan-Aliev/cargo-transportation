@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf dist && npx tsc && npx prisma migrate deploy",
+    "build": "npm install && rimraf dist && npx tsc && npx prisma migrate deploy",
     "prestart": "npm run build",
     "start": "node dist/index.js",
     "preserve": "npm run build",
