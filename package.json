@@ -4,10 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm install && rimraf dist && npx tsc && npm run migrate:prod",
+    "build": "npm install && rimraf dist && npx tsc && npx prisma migrate deploy",
     "prestart": "npm run build",
     "migrate:dev": "npx prisma migrate dev --name",
-    "migrate:prod": "npx prisma migrate deploy",
     "start": "node dist/index.js",
     "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w\"  \"nodemon dist/index.js\""
