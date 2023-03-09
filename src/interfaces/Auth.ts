@@ -22,6 +22,16 @@ export interface MyToken {
   email: string;
 }
 
-export interface MyRequest extends Request {
+export interface AuthorizedRequest extends Request {
   user: MyToken;
+}
+
+export interface EditUser {
+  email?: string;
+  name?: string;
+  surname?: string;
+  phone?: string;
+  password?: string;
+  whatsapp?: string;
+  telegram?: string;
 }

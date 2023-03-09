@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { MyRequest } from "../interfaces/Auth";
+import { AuthorizedRequest } from "../interfaces/Auth";
 import { ApiError, Token } from "../utils";
 
 export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const myRequest = req as MyRequest;
+    const myRequest = req as AuthorizedRequest;
     const bearer = myRequest.headers.authorization;
     if (!bearer) {
       throw ApiError.UnAuthorizedError("Требуются заголовки для токена");

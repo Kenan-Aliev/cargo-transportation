@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { LoginRequest, MyToken, User } from "../interfaces/Auth";
+import { EditUser, LoginRequest, MyToken, User } from "../interfaces/Auth";
 import { ApiError, Token } from "../utils";
 import bcrypt from "bcrypt";
 import randomstring from "randomstring";
@@ -79,6 +79,7 @@ class UsersServices {
   async getUserProfile(data: MyToken) {
     const user = await prisma.user.findFirst({ where: { id: data.id } });
     return {
+      id: user?.id,
       email: user?.email,
       name: user?.name,
       surname: user?.surname,
@@ -86,6 +87,21 @@ class UsersServices {
       whatsapp: user?.whatsapp,
       telegram: user?.telegram,
     };
+  }
+
+  async editProfile(userId: number, data: EditUser) {
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 8);
+    }
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...user,
+        ...data,
+      },
+    });
+    return updatedUser;
   }
 }
 

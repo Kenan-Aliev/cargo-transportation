@@ -2,14 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { usersServices } from "../services";
 import { validationResult } from "express-validator";
 import { ApiError } from "../utils";
-import { MyRequest } from "../interfaces/Auth";
+import { AuthorizedRequest } from "../interfaces/Auth";
 
 class UsersController {
   async signUp(req: Request, res: Response, next: NextFunction) {
     try {
       const validationErrors = validationResult(req);
       if (!validationErrors.isEmpty()) {
-        console.log(validationErrors.array());
         throw ApiError.ValidationError(validationErrors.array()[0].msg);
       }
       const data = req.body;
@@ -42,8 +41,23 @@ class UsersController {
 
   async getProfile(req: Request, res: Response, next: NextFunction) {
     try {
-      const myRequest = req as MyRequest;
+      const myRequest = req as AuthorizedRequest;
       const response = await usersServices.getUserProfile(myRequest.user);
+      return res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async editProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const myRequest = req as AuthorizedRequest;
+      const validationErrors = validationResult(myRequest);
+      if (!validationErrors.isEmpty()) {
+        throw ApiError.ValidationError(validationErrors.array()[0].msg);
+      }
+      const data = myRequest.body;
+      const response = await usersServices.editProfile(myRequest.user.id, data);
       return res.json(response);
     } catch (err) {
       next(err);

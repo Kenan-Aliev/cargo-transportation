@@ -21,4 +21,27 @@ model User {
   activationCode String?
   whatsapp       String?
   telegram       String?
+  cargos         Cargo[]
+}
+
+model Cargo {
+  id            Int        @id @default(autoincrement())
+  name          String
+  from          String
+  to            String
+  weight        String
+  volume        String
+  transportType String
+  shipmentDate  DateTime
+  price         Int
+  author        User       @relation(fields: [authorId], references: [id])
+  authorId      Int
+  contacts      Contacts[]
+}
+
+model Contacts {
+  id      Int    @id @default(autoincrement())
+  contact String
+  cargo   Cargo  @relation(fields: [cargoId], references: [id])
+  cargoId Int
 }
