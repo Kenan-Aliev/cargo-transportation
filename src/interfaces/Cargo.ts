@@ -11,3 +11,15 @@ export interface Cargo {
   authorId: number;
   contacts: string[];
 }
+
+export interface CargoFilter {
+  where: {
+    to?: {
+      contains?: string;
+    };
+    shipmentDate?: {
+      lte?: Date;
+      gte?: Date;
+    };
+  };
+}

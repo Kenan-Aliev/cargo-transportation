@@ -22,7 +22,15 @@ class CargosController {
 
   async getList(req: Request, res: Response, next: NextFunction) {
     try {
-      const response = await cargosServices.getList();
+      const { city, startDate, endDate } = req.query;
+      if (!startDate && endDate) {
+        throw ApiError.ClientError("Укажите начальную дату");
+      }
+      const response = await cargosServices.getList(
+        city ? String(city) : "",
+        startDate ? String(startDate) : "",
+        endDate ? String(endDate) : ""
+      );
       return res.json(response);
     } catch (err) {
       next(err);
@@ -33,6 +41,30 @@ class CargosController {
     try {
       const myRequest = req as AuthorizedRequest;
       const response = await cargosServices.getUserCargos(myRequest.user.id);
+      return res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getCargoById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const response = await cargosServices.getCargoById(Number(id));
+      return res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async deleteCargoById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const myRequest = req as AuthorizedRequest;
+      const { id } = myRequest.params;
+      const response = await cargosServices.deleteCargoById(
+        Number(id),
+        myRequest.user.id
+      );
       return res.json(response);
     } catch (err) {
       next(err);

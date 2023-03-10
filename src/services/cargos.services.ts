@@ -1,9 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { ApiError } from "../utils";
-import bcrypt from "bcrypt";
-import randomstring from "randomstring";
-import { SendMail } from "../utils";
 import { Cargo } from "../interfaces/Cargo";
+import { ApiError } from "../utils";
 
 const prisma = new PrismaClient();
 
@@ -23,8 +20,30 @@ class CargosServices {
     return cargo;
   }
 
-  async getList() {
+  async getList(city: string, startDate: string, endDate: string) {
+    let filter = {};
+    if (city) {
+      filter = { ...filter, to: { contains: city } };
+    }
+
+    if (startDate && !endDate) {
+      filter = {
+        ...filter,
+        shipmentDate: { gte: new Date(startDate).toISOString() },
+      };
+    } else if (startDate && endDate) {
+      filter = {
+        ...filter,
+        shipmentDate: {
+          gte: new Date(startDate).toISOString(),
+          lte: new Date(endDate).toISOString(),
+        },
+      };
+    }
     const cargos = await prisma.cargo.findMany({
+      where: {
+        ...filter,
+      },
       include: {
         contacts: {
           select: {
@@ -60,6 +79,46 @@ class CargosServices {
       },
     });
     return cargos;
+  }
+
+  async getCargoById(id: number) {
+    const cargo = await prisma.cargo.findFirst({
+      where: {
+        id: id,
+      },
+      include: {
+        contacts: {
+          select: {
+            id: true,
+            contact: true,
+          },
+        },
+        author: {
+          select: {
+            name: true,
+            surname: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+    });
+    return cargo;
+  }
+
+  async deleteCargoById(id: number, userId: number) {
+    const deleted = await prisma.cargo.deleteMany({
+      where: {
+        id: id,
+        authorId: userId,
+      },
+    });
+    if (deleted.count > 0) {
+      return { message: "Вы успешно удалили груз" };
+    }
+    throw ApiError.ClientError(
+      "Не удалось удалить груз, возможно такого груза нет или вы пытаетесь удалить чужой груз"
+    );
   }
 }
 

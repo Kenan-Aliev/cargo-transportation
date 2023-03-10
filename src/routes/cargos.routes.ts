@@ -16,4 +16,8 @@ router.get("/getUserCargos", checkAuth, CargosController.getUserCargos);
 
 router.get("/getList", CargosController.getList);
 
+router.get("/:id", CargosController.getCargoById);
+
+router.delete("/:id", checkAuth, CargosController.deleteCargoById);
+
 export default router;

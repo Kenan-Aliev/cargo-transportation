@@ -34,7 +34,7 @@ model Cargo {
   transportType String
   shipmentDate  DateTime
   price         Int
-  author        User       @relation(fields: [authorId], references: [id])
+  author        User       @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      Int
   contacts      Contacts[]
 }
@@ -42,6 +42,6 @@ model Cargo {
 model Contacts {
   id      Int    @id @default(autoincrement())
   contact String
-  cargo   Cargo  @relation(fields: [cargoId], references: [id])
+  cargo   Cargo  @relation(fields: [cargoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cargoId Int
 }
