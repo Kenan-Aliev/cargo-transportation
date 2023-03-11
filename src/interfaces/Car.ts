@@ -1,4 +1,4 @@
-export interface Cargo {
+export interface Car {
   id?: number;
   name: string;
   from: string;
@@ -7,9 +7,6 @@ export interface Cargo {
   volume: string;
   transportType: string;
   shipmentDate: Date;
-  price: number;
   authorId: number;
   contacts: string[];
 }
-
-

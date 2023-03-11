@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import { usersRouter, cargosRouter } from "./routes";
+import { usersRouter, cargosRouter, carsRouter } from "./routes";
 import { exceptionMiddleware } from "./midllewares";
 
 class App {
@@ -14,6 +14,7 @@ class App {
     this.app.use(express.json());
     this.app.use("/auth", usersRouter);
     this.app.use("/cargo", cargosRouter);
+    this.app.use("/cars", carsRouter);
     this.app.use(exceptionMiddleware);
 
     this.app.listen(this.port, () => {
