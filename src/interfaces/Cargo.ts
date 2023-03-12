@@ -12,4 +12,9 @@ export interface Cargo {
   contacts: string[];
 }
 
-
+export type EditCargo = Omit<Cargo, "contacts" | "authorId"> & {
+  contacts: {
+    id: number;
+    contact: string;
+  }[];
+};

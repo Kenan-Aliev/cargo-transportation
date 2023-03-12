@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Car } from "../interfaces/Car";
+import { Car, EditCar } from "../interfaces/Car";
 import { ApiError } from "../utils";
 
 const prisma = new PrismaClient();
@@ -18,6 +18,31 @@ class CarsServices {
       },
     });
     return car;
+  }
+
+  async edit(cargoId: number, data: EditCar) {
+    const updated = await prisma.car.update({
+      where: {
+        id: cargoId,
+      },
+      data: {
+        ...data,
+        contacts: {
+          deleteMany: {
+            id: {
+              in: data.contacts.map((contact) => {
+                return contact.id;
+              }),
+            },
+          },
+          createMany: {
+            data: data.contacts,
+          },
+        },
+      },
+    });
+
+    return updated;
   }
 
   async getList(from: string, to: string, date: string) {

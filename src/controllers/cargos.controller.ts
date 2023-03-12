@@ -20,6 +20,22 @@ class CargosController {
     }
   }
 
+  async edit(req: Request, res: Response, next: NextFunction) {
+    try {
+      const myRequest = req as AuthorizedRequest;
+      const validationErrors = validationResult(myRequest);
+      if (!validationErrors.isEmpty()) {
+        throw ApiError.ValidationError(validationErrors.array()[0].msg);
+      }
+      const data = myRequest.body;
+      const { id: cargoId } = myRequest.params;
+      const response = await cargosServices.edit(Number(cargoId), data);
+      return res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async getList(req: Request, res: Response, next: NextFunction) {
     try {
       const { city, startDate, endDate } = req.query;

@@ -16,7 +16,6 @@ class App {
     this.app.use("/cargo", cargosRouter);
     this.app.use("/cars", carsRouter);
     this.app.use(exceptionMiddleware);
-
     this.app.listen(this.port, () => {
       console.log(`Server started on PORT ${this.port}`);
     });

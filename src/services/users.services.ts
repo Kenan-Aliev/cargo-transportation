@@ -4,6 +4,7 @@ import { ApiError, Token } from "../utils";
 import bcrypt from "bcrypt";
 import randomstring from "randomstring";
 import { SendMail } from "../utils";
+import tokensServices from "./tokens.services";
 
 const prisma = new PrismaClient();
 
@@ -57,6 +58,7 @@ class UsersServices {
       );
     }
     const token = Token.encrypt(user.id, user.email);
+    await tokensServices.create(user.id, token);
     return { token };
   }
 
@@ -102,6 +104,11 @@ class UsersServices {
       },
     });
     return updatedUser;
+  }
+
+  async logout(userId: number) {
+    await tokensServices.delete(userId);
+    return { message: "Вы успешно вышли из аккаунта" };
   }
 }
 

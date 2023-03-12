@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const createCargoValidators = [
+export const editCargoValidators = [
   body("name").isString().withMessage("Название груза должно быть строкой"),
   body("from")
     .isString()
@@ -30,8 +30,17 @@ export const createCargoValidators = [
     )
     .custom((value) => {
       return value.every((contact: any) => {
-        return typeof contact === "string";
+        return typeof contact === "object";
       });
     })
-    .withMessage("Контакты должны быть массивом строк"),
+    .withMessage("Контакты должны быть массивом объектов")
+    .custom((value) => {
+      return value.every((contact: any) => {
+        return (
+          Object.keys(contact).includes("id") &&
+          Object.keys(contact).includes("contact")
+        );
+      });
+    })
+    .withMessage("Объекты контактов должны содержать ключи id и contact"),
 ];

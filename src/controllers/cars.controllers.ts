@@ -20,6 +20,22 @@ class CarsController {
     }
   }
 
+  async edit(req: Request, res: Response, next: NextFunction) {
+    try {
+      const myRequest = req as AuthorizedRequest;
+      const validationErrors = validationResult(myRequest);
+      if (!validationErrors.isEmpty()) {
+        throw ApiError.ValidationError(validationErrors.array()[0].msg);
+      }
+      const data = myRequest.body;
+      const { id: carId } = myRequest.params;
+      const response = await carsServices.edit(Number(carId), data);
+      return res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async getList(req: Request, res: Response, next: NextFunction) {
     try {
       const { from, to, date } = req.query;

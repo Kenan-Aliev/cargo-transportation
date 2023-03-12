@@ -10,3 +10,10 @@ export interface Car {
   authorId: number;
   contacts: string[];
 }
+
+export type EditCar = Omit<Car, "contacts" | "authorId"> & {
+  contacts: {
+    id: number;
+    contact: string;
+  }[];
+};

@@ -1,5 +1,4 @@
-import { Request as ExpressRequest, Request } from "express";
-import { JwtPayload } from "jsonwebtoken";
+import { Request } from "express";
 
 export interface User {
   id?: number;

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { checkAuth } from "../midllewares";
 import { CargosController } from "../controllers";
-import { createCargoValidators } from "../validators";
+import { createCargoValidators, editCargoValidators } from "../validators";
 
 const router = Router();
 
@@ -17,6 +17,13 @@ router.get("/getUserCargos", checkAuth, CargosController.getUserCargos);
 router.get("/getList", CargosController.getList);
 
 router.get("/:id", CargosController.getCargoById);
+
+router.patch(
+  "/edit/:id",
+  checkAuth,
+  editCargoValidators,
+  CargosController.edit
+);
 
 router.delete("/:id", checkAuth, CargosController.deleteCargoById);
 

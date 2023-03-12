@@ -19,4 +19,6 @@ router.patch(
   UsersController.editProfile
 );
 
+router.get("/logout", checkAuth, UsersController.logout);
+
 export default router;

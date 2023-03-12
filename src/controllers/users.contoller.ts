@@ -63,6 +63,16 @@ class UsersController {
       next(err);
     }
   }
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const myRequest = req as AuthorizedRequest;
+      const response = await usersServices.logout(myRequest.user.id);
+      return res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new UsersController();

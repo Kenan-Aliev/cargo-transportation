@@ -22,7 +22,8 @@ model User {
   whatsapp       String?
   telegram       String?
   cargos         Cargo[]
-  Car            Car[]
+  cars           Car[]
+  token          Tokens?
 }
 
 model Cargo {
@@ -61,4 +62,11 @@ model Contacts {
   cargoId Int?
   Car     Car?   @relation(fields: [carId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   carId   Int?
+}
+
+model Tokens {
+  id     Int    @id @default(autoincrement())
+  token  String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int    @unique
 }

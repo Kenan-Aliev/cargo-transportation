@@ -24,5 +24,13 @@ export const createCarValidators = [
     .withMessage("Дата погрузки должна быть датой"),
   body("contacts")
     .isArray({ min: 1 })
+    .withMessage(
+      "Контакты должны быть массивом и массив должен содержать как минимум один элемент"
+    )
+    .custom((value) => {
+      return value.every((contact: any) => {
+        return typeof contact === "string";
+      });
+    })
     .withMessage("Контакты должны быть массивом строк"),
 ];

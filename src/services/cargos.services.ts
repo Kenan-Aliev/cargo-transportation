@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Cargo } from "../interfaces/Cargo";
+import { Cargo, EditCargo } from "../interfaces/Cargo";
 import { ApiError } from "../utils";
 
 const prisma = new PrismaClient();
@@ -18,6 +18,31 @@ class CargosServices {
       },
     });
     return cargo;
+  }
+
+  async edit(cargoId: number, data: EditCargo) {
+    const updated = await prisma.cargo.update({
+      where: {
+        id: cargoId,
+      },
+      data: {
+        ...data,
+        contacts: {
+          deleteMany: {
+            id: {
+              in: data.contacts.map((contact) => {
+                return contact.id;
+              }),
+            },
+          },
+          createMany: {
+            data: data.contacts,
+          },
+        },
+      },
+    });
+
+    return updated;
   }
 
   async getList(city: string, startDate: string, endDate: string) {
