@@ -27,6 +27,7 @@ class CargosServices {
       },
       data: {
         ...data,
+        placementDate: undefined,
         contacts: {
           deleteMany: {
             id: {

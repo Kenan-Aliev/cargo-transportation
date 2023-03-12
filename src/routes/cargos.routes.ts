@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkAuth } from "../midllewares";
+import { checkAuth, checkCargosPlacementDate } from "../midllewares";
 import { CargosController } from "../controllers";
 import { createCargoValidators, editCargoValidators } from "../validators";
 
@@ -14,7 +14,7 @@ router.post(
 
 router.get("/getUserCargos", checkAuth, CargosController.getUserCargos);
 
-router.get("/getList", CargosController.getList);
+router.get("/getList", checkCargosPlacementDate, CargosController.getList);
 
 router.get("/:id", CargosController.getCargoById);
 

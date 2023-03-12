@@ -35,6 +35,7 @@ model Cargo {
   volume        String
   transportType String
   shipmentDate  DateTime
+  placementDate DateTime   @default(now())
   price         Int
   author        User       @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      Int
