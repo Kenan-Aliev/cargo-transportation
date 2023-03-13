@@ -38,14 +38,20 @@ class CargosController {
 
   async getList(req: Request, res: Response, next: NextFunction) {
     try {
-      const { city, startDate, endDate } = req.query;
+      const validationErrors = validationResult(req);
+      if (!validationErrors.isEmpty()) {
+        throw ApiError.ValidationError(validationErrors.array()[0].msg);
+      }
+      const { city, startDate, endDate, limit, page } = req.query;
       if (!startDate && endDate) {
         throw ApiError.ClientError("Укажите начальную дату");
       }
       const response = await cargosServices.getList(
         city ? String(city) : "",
         startDate ? String(startDate) : "",
-        endDate ? String(endDate) : ""
+        endDate ? String(endDate) : "",
+        Number(limit),
+        Number(page)
       );
       return res.json(response);
     } catch (err) {

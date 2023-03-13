@@ -45,7 +45,14 @@ class CarsServices {
     return updated;
   }
 
-  async getList(from: string, to: string, date: string) {
+  async getList(
+    from: string,
+    to: string,
+    date: string,
+    limit: number,
+    page: number
+  ) {
+    const offset = page * limit - limit;
     let filter = {};
     if (from) {
       filter = { ...filter, from: { contains: from } };
@@ -85,6 +92,8 @@ class CarsServices {
           },
         },
       },
+      skip: offset,
+      take: limit,
     });
     return cars;
   }

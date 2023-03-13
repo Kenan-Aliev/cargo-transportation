@@ -38,11 +38,17 @@ class CarsController {
 
   async getList(req: Request, res: Response, next: NextFunction) {
     try {
-      const { from, to, date } = req.query;
+      const validationErrors = validationResult(req);
+      if (!validationErrors.isEmpty()) {
+        throw ApiError.ValidationError(validationErrors.array()[0].msg);
+      }
+      const { from, to, date, limit, page } = req.query;
       const response = await carsServices.getList(
         from ? String(from) : "",
         to ? String(to) : "",
-        date ? String(date) : ""
+        date ? String(date) : "",
+        Number(limit),
+        Number(page)
       );
       return res.json(response);
     } catch (err) {

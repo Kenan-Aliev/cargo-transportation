@@ -46,10 +46,17 @@ class CargosServices {
     return updated;
   }
 
-  async getList(city: string, startDate: string, endDate: string) {
+  async getList(
+    city: string,
+    startDate: string,
+    endDate: string,
+    limit: number,
+    page: number
+  ) {
+    const offset = page * limit - limit;
     let filter = {};
     if (city) {
-      filter = { ...filter, to: { contains: city } };
+      filter = { ...filter, from: { contains: city } };
     }
 
     if (startDate && !endDate) {
@@ -86,6 +93,8 @@ class CargosServices {
           },
         },
       },
+      skip: offset,
+      take: limit,
     });
     return cargos;
   }

@@ -4,6 +4,7 @@ import { createCargoValidators } from "./createCargoValidators";
 import { createCarValidators } from "./createCarValidators";
 import { editCarValidators } from "./editCarValidation";
 import { editCargoValidators } from "./editCargoValidation";
+import { queryParamsValidators } from "./queryParamsValidators";
 
 export {
   registerValidators,
@@ -12,4 +13,5 @@ export {
   createCarValidators,
   editCarValidators,
   editCargoValidators,
+  queryParamsValidators,
 };
